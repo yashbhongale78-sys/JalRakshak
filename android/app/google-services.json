@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "856673120703",
+    "project_id": "waterborne-detection",
+    "storage_bucket": "waterborne-detection.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:856673120703:android:a57e6454bd344922ccf10a",
+        "android_client_info": {
+          "package_name": "com.northeast.waterborne"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAReE-JfMAdZPNpoP5pCuQ5YARMqZwd614"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
