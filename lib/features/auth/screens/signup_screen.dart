@@ -56,7 +56,9 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
             district: _districtController.text.trim(),
             state: _selectedState,
           );
-      // On success, auth state changes — router handles navigation
+      if (mounted) {
+        Navigator.of(context).popUntil((route) => route.isFirst);
+      }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(

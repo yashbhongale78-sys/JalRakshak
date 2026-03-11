@@ -109,16 +109,9 @@ class AuthService {
       final profile = await getUserProfile(user.uid);
       if (profile != null) return profile;
 
-      final recoveredProfile = UserModel(
-        uid: user.uid,
-        name: user.displayName ?? 'User',
-        email: user.email ?? normalizedEmail,
-        phone: user.phoneNumber ?? '',
-        role: AppConstants.roleVillager,
-        village: '',
-        district: '',
-        state: '',
-        createdAt: DateTime.now(),
+      final recoveredProfile = _buildFallbackProfile(
+        user,
+        email: normalizedEmail,
       );
 
       await _firestore
@@ -199,9 +192,37 @@ class AuthService {
 
       if (!doc.exists || doc.data() == null) return null;
       return UserModel.fromMap(doc.data()!);
+    } on FirebaseException catch (e) {
+      if (e.code == 'permission-denied') {
+        final currentUser = _auth.currentUser;
+        if (currentUser != null && currentUser.uid == uid) {
+          return _buildFallbackProfile(
+            currentUser,
+            email: currentUser.email ?? '',
+          );
+        }
+      }
+      throw Exception('Failed to fetch user profile: $e');
     } catch (e) {
       throw Exception('Failed to fetch user profile: $e');
     }
+  }
+
+  UserModel _buildFallbackProfile(
+    User user, {
+    required String email,
+  }) {
+    return UserModel(
+      uid: user.uid,
+      name: user.displayName ?? 'User',
+      email: email,
+      phone: user.phoneNumber ?? '',
+      role: AppConstants.roleVillager,
+      village: '',
+      district: '',
+      state: '',
+      createdAt: DateTime.now(),
+    );
   }
 
   // ─── Sign Out ───────────────────────────────────────────────
