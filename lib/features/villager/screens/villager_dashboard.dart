@@ -12,6 +12,8 @@ import '../../../features/auth/providers/auth_provider.dart';
 import '../../../presentation/screens/alerts_screen.dart';
 import '../../../presentation/screens/nearby_clinics_screen.dart';
 import '../../../presentation/screens/prevention_tips_screen.dart';
+import '../../../presentation/screens/community_reports_screen.dart';
+import '../../../presentation/widgets/quick_report_card.dart';
 import '../../reports/screens/symptom_report_screen.dart';
 import '../../reports/screens/water_report_screen.dart';
 
@@ -253,6 +255,9 @@ class _DashboardHome extends StatelessWidget {
         SliverToBoxAdapter(
           child: _SurveyBanner(),
         ),
+        const SliverToBoxAdapter(
+          child: QuickReportCard(),
+        ),
         SliverToBoxAdapter(
           child: _MapSectionWidget(),
         ),
@@ -263,6 +268,12 @@ class _DashboardHome extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
             child: _ClinicsButtonCard(),
+          ),
+        ),
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+            child: _CommunityReportsButtonCard(),
           ),
         ),
         const SliverToBoxAdapter(
@@ -591,6 +602,86 @@ class _ClinicsButtonCard extends StatelessWidget {
                       SizedBox(height: 4),
                       Text(
                         'Find the closest health centers near your village.',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: AppColors.textSecondary,
+                          fontFamily: 'Poppins',
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const Icon(
+                  Icons.arrow_forward_ios_rounded,
+                  size: 16,
+                  color: AppColors.textSecondary,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _CommunityReportsButtonCard extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () => Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const CommunityReportsScreen()),
+        ),
+        borderRadius: BorderRadius.circular(20),
+        child: Ink(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: Colors.grey.shade200),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.04),
+                blurRadius: 10,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(18),
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(14),
+                  decoration: const BoxDecoration(
+                    color: Color(0xFFE3F2FD),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.health_and_safety_outlined,
+                    color: Color(0xFF1976D2),
+                    size: 28,
+                  ),
+                ),
+                const SizedBox(width: 14),
+                const Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Community Health Reports',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.textPrimary,
+                          fontFamily: 'Poppins',
+                        ),
+                      ),
+                      SizedBox(height: 4),
+                      Text(
+                        'View disease reports and cases in your area.',
                         style: TextStyle(
                           fontSize: 12,
                           color: AppColors.textSecondary,

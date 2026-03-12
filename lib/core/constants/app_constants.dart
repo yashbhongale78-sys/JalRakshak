@@ -75,47 +75,82 @@ class AppConstants {
     'Sikkim',
   ];
 
+  // ─── All Indian States ──────────────────────────────────────
+  static const List<String> indianStates = [
+    'Andhra Pradesh',
+    'Arunachal Pradesh',
+    'Assam',
+    'Bihar',
+    'Chhattisgarh',
+    'Goa',
+    'Gujarat',
+    'Haryana',
+    'Himachal Pradesh',
+    'Jharkhand',
+    'Karnataka',
+    'Kerala',
+    'Madhya Pradesh',
+    'Maharashtra',
+    'Manipur',
+    'Meghalaya',
+    'Mizoram',
+    'Nagaland',
+    'Odisha',
+    'Punjab',
+    'Rajasthan',
+    'Sikkim',
+    'Tamil Nadu',
+    'Telangana',
+    'Tripura',
+    'Uttar Pradesh',
+    'Uttarakhand',
+    'West Bengal',
+    // Union Territories
+    'Andaman and Nicobar Islands',
+    'Chandigarh',
+    'Dadra and Nagar Haveli and Daman and Diu',
+    'Delhi',
+    'Jammu and Kashmir',
+    'Ladakh',
+    'Lakshadweep',
+    'Puducherry',
+  ];
+
   // ─── Prevention Tips ────────────────────────────────────────
   static const List<Map<String, String>> preventionTips = [
     {
       'title': 'Boil Drinking Water',
-      'description':
-          'Always boil water for at least 1 minute before drinking. '
+      'description': 'Always boil water for at least 1 minute before drinking. '
           'Let it cool in a clean, covered container.',
       'icon': '🔥',
     },
     {
       'title': 'Wash Hands Regularly',
-      'description':
-          'Wash hands with soap and clean water before eating, '
+      'description': 'Wash hands with soap and clean water before eating, '
           'after using toilet, and after handling animals.',
       'icon': '🤲',
     },
     {
       'title': 'Store Water Safely',
-      'description':
-          'Store drinking water in clean, covered containers. '
+      'description': 'Store drinking water in clean, covered containers. '
           'Never use same vessel for fetching and storing.',
       'icon': '🪣',
     },
     {
       'title': 'Use Toilet / Latrine',
-      'description':
-          'Always use a toilet or latrine. '
+      'description': 'Always use a toilet or latrine. '
           'Open defecation near water sources spreads disease.',
       'icon': '🚽',
     },
     {
       'title': 'Keep Surroundings Clean',
-      'description':
-          'Remove garbage and stagnant water near your home '
+      'description': 'Remove garbage and stagnant water near your home '
           'to prevent mosquito and fly breeding.',
       'icon': '🧹',
     },
     {
       'title': 'Cook Food Properly',
-      'description':
-          'Cook food thoroughly and eat fresh meals. '
+      'description': 'Cook food thoroughly and eat fresh meals. '
           'Avoid raw or undercooked food, especially fish.',
       'icon': '🍳',
     },
@@ -123,14 +158,14 @@ class AppConstants {
       'title': 'Use ORS for Diarrhea',
       'description':
           'If someone has diarrhea, give Oral Rehydration Solution (ORS). '
-          'Mix 1 packet in 1 liter of boiled water.',
+              'Mix 1 packet in 1 liter of boiled water.',
       'icon': '💊',
     },
     {
       'title': 'Report Illness Early',
       'description':
           'Report any illness in your village immediately using this app. '
-          'Early detection saves lives.',
+              'Early detection saves lives.',
       'icon': '📱',
     },
   ];

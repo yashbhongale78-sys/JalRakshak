@@ -28,7 +28,6 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
   String _selectedState = 'Assam';
   bool _obscurePassword = true;
   bool _isLoading = false;
-  final int _currentStep = 0; // For multi-step form UX
 
   @override
   void dispose() {
@@ -46,13 +45,17 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
 
     setState(() => _isLoading = true);
     try {
+      final isGovernment = _selectedRole == AppConstants.roleGovernment;
+
       await ref.read(authProvider.notifier).signUp(
             email: _emailController.text.trim(),
             password: _passwordController.text,
-            name: _nameController.text.trim(),
-            phone: _phoneController.text.trim(),
+            name: isGovernment
+                ? 'Government Official'
+                : _nameController.text.trim(),
+            phone: isGovernment ? '' : _phoneController.text.trim(),
             role: _selectedRole,
-            village: _villageController.text.trim(),
+            village: isGovernment ? '' : _villageController.text.trim(),
             district: _districtController.text.trim(),
             state: _selectedState,
           );
@@ -197,89 +200,94 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                 const Divider(),
                 const SizedBox(height: 20),
 
-                // ── Personal Info ─────────────────────────────
-                Text(
-                  'Personal Information',
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                const SizedBox(height: 16),
-
-                // Full Name
-                TextFormField(
-                  controller: _nameController,
-                  textCapitalization: TextCapitalization.words,
-                  decoration: const InputDecoration(
-                    labelText: 'Full Name *',
-                    prefixIcon: Icon(Icons.person_outlined),
+                // ── Personal Info (hidden for government) ─────
+                if (_selectedRole != AppConstants.roleGovernment) ...[
+                  Text(
+                    'Personal Information',
+                    style: Theme.of(context).textTheme.titleLarge,
                   ),
-                  validator: (val) =>
-                      (val == null || val.isEmpty) ? 'Name is required' : null,
-                ),
-                const SizedBox(height: 14),
+                  const SizedBox(height: 16),
 
-                // Email
-                TextFormField(
-                  controller: _emailController,
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: const InputDecoration(
-                    labelText: 'Email Address *',
-                    prefixIcon: Icon(Icons.email_outlined),
-                  ),
-                  validator: (val) {
-                    if (val == null || val.isEmpty) return 'Email is required';
-                    if (!AppUtils.isValidEmail(val)) return 'Invalid email';
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 14),
-
-                // Phone
-                TextFormField(
-                  controller: _phoneController,
-                  keyboardType: TextInputType.phone,
-                  decoration: const InputDecoration(
-                    labelText: 'Phone Number *',
-                    prefixIcon: Icon(Icons.phone_outlined),
-                    prefixText: '+91 ',
-                  ),
-                  validator: (val) {
-                    if (val == null || val.isEmpty) return 'Phone is required';
-                    if (!AppUtils.isValidPhone(val)) {
-                      return 'Enter valid 10-digit number';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 14),
-
-                // Password
-                TextFormField(
-                  controller: _passwordController,
-                  obscureText: _obscurePassword,
-                  decoration: InputDecoration(
-                    labelText: 'Password *',
-                    prefixIcon: const Icon(Icons.lock_outlined),
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        _obscurePassword
-                            ? Icons.visibility_outlined
-                            : Icons.visibility_off_outlined,
-                      ),
-                      onPressed: () =>
-                          setState(() => _obscurePassword = !_obscurePassword),
+                  // Full Name
+                  TextFormField(
+                    controller: _nameController,
+                    textCapitalization: TextCapitalization.words,
+                    decoration: const InputDecoration(
+                      labelText: 'Full Name *',
+                      prefixIcon: Icon(Icons.person_outlined),
                     ),
+                    validator: (val) => (val == null || val.isEmpty)
+                        ? 'Name is required'
+                        : null,
                   ),
-                  validator: (val) {
-                    if (val == null || val.isEmpty) {
-                      return 'Password is required';
-                    }
-                    if (val.length < 6) {
-                      return 'Minimum 6 characters required';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 28),
+                  const SizedBox(height: 14),
+
+                  // Email
+                  TextFormField(
+                    controller: _emailController,
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: const InputDecoration(
+                      labelText: 'Email Address *',
+                      prefixIcon: Icon(Icons.email_outlined),
+                    ),
+                    validator: (val) {
+                      if (val == null || val.isEmpty)
+                        return 'Email is required';
+                      if (!AppUtils.isValidEmail(val)) return 'Invalid email';
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 14),
+
+                  // Phone
+                  TextFormField(
+                    controller: _phoneController,
+                    keyboardType: TextInputType.phone,
+                    decoration: const InputDecoration(
+                      labelText: 'Phone Number *',
+                      prefixIcon: Icon(Icons.phone_outlined),
+                      prefixText: '+91 ',
+                    ),
+                    validator: (val) {
+                      if (val == null || val.isEmpty)
+                        return 'Phone is required';
+                      if (!AppUtils.isValidPhone(val)) {
+                        return 'Enter valid 10-digit number';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 14),
+
+                  // Password
+                  TextFormField(
+                    controller: _passwordController,
+                    obscureText: _obscurePassword,
+                    decoration: InputDecoration(
+                      labelText: 'Password *',
+                      prefixIcon: const Icon(Icons.lock_outlined),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _obscurePassword
+                              ? Icons.visibility_outlined
+                              : Icons.visibility_off_outlined,
+                        ),
+                        onPressed: () => setState(
+                            () => _obscurePassword = !_obscurePassword),
+                      ),
+                    ),
+                    validator: (val) {
+                      if (val == null || val.isEmpty) {
+                        return 'Password is required';
+                      }
+                      if (val.length < 6) {
+                        return 'Minimum 6 characters required';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 28),
+                ],
 
                 // ── Location Info ─────────────────────────────
                 Text(
@@ -288,17 +296,23 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                 ),
                 const SizedBox(height: 16),
 
-                // Village
-                TextFormField(
-                  controller: _villageController,
-                  textCapitalization: TextCapitalization.words,
+                // State Dropdown
+                DropdownButtonFormField<String>(
+                  value: _selectedState,
                   decoration: const InputDecoration(
-                    labelText: 'Village Name *',
-                    prefixIcon: Icon(Icons.home_outlined),
+                    labelText: 'State *',
+                    prefixIcon: Icon(Icons.map_outlined),
                   ),
-                  validator: (val) => (val == null || val.isEmpty)
-                      ? 'Village name is required'
-                      : null,
+                  items: AppConstants.indianStates
+                      .map((state) => DropdownMenuItem(
+                            value: state,
+                            child: Text(state,
+                                style: const TextStyle(fontFamily: 'Poppins')),
+                          ))
+                      .toList(),
+                  onChanged: (val) {
+                    if (val != null) setState(() => _selectedState = val);
+                  },
                 ),
                 const SizedBox(height: 14),
 
@@ -314,26 +328,26 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                       ? 'District is required'
                       : null,
                 ),
-                const SizedBox(height: 14),
 
-                // State Dropdown
-                DropdownButtonFormField<String>(
-                  initialValue: _selectedState,
-                  decoration: const InputDecoration(
-                    labelText: 'State *',
-                    prefixIcon: Icon(Icons.map_outlined),
+                // Village (only for non-government users)
+                if (_selectedRole != AppConstants.roleGovernment) ...[
+                  const SizedBox(height: 14),
+                  TextFormField(
+                    controller: _villageController,
+                    textCapitalization: TextCapitalization.words,
+                    decoration: const InputDecoration(
+                      labelText: 'Village Name *',
+                      prefixIcon: Icon(Icons.home_outlined),
+                    ),
+                    validator: (val) {
+                      if (_selectedRole != AppConstants.roleGovernment &&
+                          (val == null || val.isEmpty)) {
+                        return 'Village name is required';
+                      }
+                      return null;
+                    },
                   ),
-                  items: AppConstants.northeastStates
-                      .map((state) => DropdownMenuItem(
-                            value: state,
-                            child: Text(state,
-                                style: const TextStyle(fontFamily: 'Poppins')),
-                          ))
-                      .toList(),
-                  onChanged: (val) {
-                    if (val != null) setState(() => _selectedState = val);
-                  },
-                ),
+                ],
 
                 const SizedBox(height: 32),
 
