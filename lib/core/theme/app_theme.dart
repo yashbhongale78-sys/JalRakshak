@@ -1,68 +1,83 @@
 // lib/core/theme/app_theme.dart
-// Centralized theme definition for the Water-Borne Detection Platform
-// Color palette: Blue = health, Green = safety, Red = alert
+// JALARAKSHA - Modern Healthcare Theme
+// Professional design for government health monitoring app
 
 import 'package:flutter/material.dart';
 
-/// Core color palette
+/// JALARAKSHA Color Palette - Healthcare focused
 class AppColors {
   AppColors._();
 
-  // ── Primary (Health Blue) ─────────────────────────────────
-  static const Color primary = Color(0xFF1565C0);       // Deep Blue
-  static const Color primaryLight = Color(0xFF5E92F3);
-  static const Color primaryDark = Color(0xFF003C8F);
-  static const Color primaryContainer = Color(0xFFD6E4FF);
+  // ── Primary (Sky Blue - Water Theme) ──────────────────────
+  static const Color primary = Color(0xFF0EA5E9); // Sky Blue
+  static const Color primaryLight = Color(0xFF38BDF8);
+  static const Color primaryDark = Color(0xFF0284C7);
+  static const Color primaryContainer = Color(0xFFE0F2FE);
 
-  // ── Secondary (Safety Green) ──────────────────────────────
-  static const Color secondary = Color(0xFF2E7D32);     // Forest Green
-  static const Color secondaryLight = Color(0xFF60AD5E);
-  static const Color secondaryDark = Color(0xFF005005);
-  static const Color secondaryContainer = Color(0xFFD4EDDA);
+  // ── Danger (High Risk Red) ─────────────────────────────────
+  static const Color danger = Color(0xFFEF4444); // Red
+  static const Color dangerLight = Color(0xFFF87171);
+  static const Color dangerContainer = Color(0xFFFEF2F2);
 
-  // ── Alert (Danger Red) ────────────────────────────────────
-  static const Color alert = Color(0xFFC62828);         // Deep Red
-  static const Color alertLight = Color(0xFFFF5F52);
-  static const Color alertContainer = Color(0xFFFFEBEE);
+  // ── Warning (Medium Risk Amber) ────────────────────────────
+  static const Color warning = Color(0xFFF59E0B); // Amber
+  static const Color warningLight = Color(0xFFFBBF24);
+  static const Color warningContainer = Color(0xFFFEF3C7);
 
-  // ── Warning Orange ────────────────────────────────────────
-  static const Color warning = Color(0xFFE65100);
-  static const Color warningLight = Color(0xFFFF833A);
-  static const Color warningContainer = Color(0xFFFFF3E0);
+  // ── Safe (Low Risk Green) ──────────────────────────────────
+  static const Color safe = Color(0xFF10B981); // Green
+  static const Color safeLight = Color(0xFF34D399);
+  static const Color safeContainer = Color(0xFFD1FAE5);
 
-  // ── Neutrals ──────────────────────────────────────────────
-  static const Color surface = Color(0xFFF8FAFE);
-  static const Color background = Color(0xFFF0F4FF);
+  // ── Dark Theme Colors ──────────────────────────────────────
+  static const Color backgroundDark = Color(0xFF0F172A); // Dark Navy
+  static const Color cardDark = Color(0xFF1E293B); // Dark Card
+  static const Color textLight = Color(0xFFF1F5F9); // Light Text
+  static const Color textMuted = Color(0xFF94A3B8); // Muted Text
+
+  // ── Legacy Support (for existing code) ─────────────────────
+  static const Color secondary = safe;
+  static const Color alert = danger;
+  static const Color alertLight = dangerLight;
+  static const Color alertContainer = dangerContainer;
+  static const Color secondaryContainer = safeContainer;
+  static const Color secondaryLight = safeLight;
+  static const Color surface = Color(0xFFF8FAFC);
+  static const Color background = Color(0xFFF1F5F9);
   static const Color cardBackground = Color(0xFFFFFFFF);
-  static const Color divider = Color(0xFFE0E7FF);
-
-  // ── Text ──────────────────────────────────────────────────
-  static const Color textPrimary = Color(0xFF1A1A2E);
-  static const Color textSecondary = Color(0xFF5A6A85);
-  static const Color textHint = Color(0xFF9EADBE);
+  static const Color divider = Color(0xFFE2E8F0);
+  static const Color textPrimary = Color(0xFF1E293B);
+  static const Color textSecondary = Color(0xFF64748B);
+  static const Color textHint = Color(0xFF94A3B8);
   static const Color textOnPrimary = Color(0xFFFFFFFF);
 
   // ── Severity Colors ───────────────────────────────────────
-  static const Color severityLow = Color(0xFF4CAF50);
-  static const Color severityMedium = Color(0xFFFFC107);
-  static const Color severityHigh = Color(0xFFFF5722);
-  static const Color severityCritical = Color(0xFFB71C1C);
+  static const Color severityLow = safe;
+  static const Color severityMedium = warning;
+  static const Color severityHigh = danger;
+  static const Color severityCritical = Color(0xFFDC2626);
 
-  // ── Gradient ─────────────────────────────────────────────
+  // ── Gradients ──────────────────────────────────────────────
   static const LinearGradient primaryGradient = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
-    colors: [primary, primaryLight],
+    colors: [primary, primaryDark],
   );
 
   static const LinearGradient headerGradient = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
-    colors: [Color(0xFF1565C0), Color(0xFF0D47A1)],
+    colors: [primary, primaryDark],
+  );
+
+  static const LinearGradient darkGradient = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [backgroundDark, Color(0xFF1E293B)],
   );
 }
 
-/// Main theme configuration
+/// JALARAKSHA Theme Configuration
 class AppTheme {
   AppTheme._();
 
@@ -75,10 +90,9 @@ class AppTheme {
       colorScheme: ColorScheme.fromSeed(
         seedColor: AppColors.primary,
         primary: AppColors.primary,
-        secondary: AppColors.secondary,
-        error: AppColors.alert,
+        secondary: AppColors.safe,
+        error: AppColors.danger,
         surface: AppColors.surface,
-        background: AppColors.background,
       ),
 
       // ── Scaffold ──────────────────────────────────────────
@@ -102,16 +116,16 @@ class AppTheme {
       cardTheme: CardThemeData(
         color: AppColors.cardBackground,
         elevation: 2,
-        shadowColor: AppColors.primary.withOpacity(0.15),
+        shadowColor: AppColors.primary.withValues(alpha: 0.15),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(12),
         ),
       ),
 
       // ── Input Decoration ──────────────────────────────────
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: Colors.white,
+        fillColor: AppColors.cardBackground,
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 16,
           vertical: 14,
@@ -130,7 +144,7 @@ class AppTheme {
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.alert),
+          borderSide: const BorderSide(color: AppColors.danger),
         ),
         hintStyle: const TextStyle(
           color: AppColors.textHint,
@@ -160,75 +174,12 @@ class AppTheme {
         ),
       ),
 
-      // ── Text Button ───────────────────────────────────────
-      textButtonTheme: TextButtonThemeData(
-        style: TextButton.styleFrom(
-          foregroundColor: AppColors.primary,
-          textStyle: const TextStyle(
-            fontFamily: 'Poppins',
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-      ),
-
-      // ── Outlined Button ───────────────────────────────────
-      outlinedButtonTheme: OutlinedButtonThemeData(
-        style: OutlinedButton.styleFrom(
-          foregroundColor: AppColors.primary,
-          side: const BorderSide(color: AppColors.primary),
-          minimumSize: const Size(double.infinity, 52),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          textStyle: const TextStyle(
-            fontFamily: 'Poppins',
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      ),
-
-      // ── Bottom Navigation ─────────────────────────────────
-      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-        backgroundColor: Colors.white,
-        selectedItemColor: AppColors.primary,
-        unselectedItemColor: AppColors.textSecondary,
-        type: BottomNavigationBarType.fixed,
-        elevation: 8,
-      ),
-
-      // ── Chip ─────────────────────────────────────────────
-      chipTheme: ChipThemeData(
-        backgroundColor: AppColors.primaryContainer,
-        labelStyle: const TextStyle(
-          fontFamily: 'Poppins',
-          color: AppColors.primary,
-          fontSize: 12,
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
-      ),
-
       // ── Text Theme ────────────────────────────────────────
       textTheme: const TextTheme(
         displayLarge: TextStyle(
           fontFamily: 'Poppins',
           fontSize: 32,
           fontWeight: FontWeight.w700,
-          color: AppColors.textPrimary,
-        ),
-        displayMedium: TextStyle(
-          fontFamily: 'Poppins',
-          fontSize: 28,
-          fontWeight: FontWeight.w600,
-          color: AppColors.textPrimary,
-        ),
-        headlineLarge: TextStyle(
-          fontFamily: 'Poppins',
-          fontSize: 24,
-          fontWeight: FontWeight.w600,
           color: AppColors.textPrimary,
         ),
         headlineMedium: TextStyle(
@@ -264,11 +215,77 @@ class AppTheme {
           fontSize: 12,
           color: AppColors.textHint,
         ),
-        labelLarge: TextStyle(
+      ),
+    );
+  }
+
+  static ThemeData get darkTheme {
+    return ThemeData(
+      useMaterial3: true,
+      fontFamily: 'Poppins',
+      brightness: Brightness.dark,
+
+      // ── Color Scheme ──────────────────────────────────────
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: AppColors.primary,
+        brightness: Brightness.dark,
+        primary: AppColors.primary,
+        secondary: AppColors.safe,
+        error: AppColors.danger,
+        surface: AppColors.cardDark,
+      ),
+
+      // ── Scaffold ──────────────────────────────────────────
+      scaffoldBackgroundColor: AppColors.backgroundDark,
+
+      // ── AppBar ────────────────────────────────────────────
+      appBarTheme: const AppBarTheme(
+        backgroundColor: AppColors.backgroundDark,
+        foregroundColor: AppColors.textLight,
+        elevation: 0,
+        centerTitle: true,
+        titleTextStyle: TextStyle(
+          fontFamily: 'Poppins',
+          fontSize: 18,
+          fontWeight: FontWeight.w600,
+          color: AppColors.textLight,
+        ),
+      ),
+
+      // ── Card ──────────────────────────────────────────────
+      cardTheme: CardThemeData(
+        color: AppColors.cardDark,
+        elevation: 4,
+        shadowColor: Colors.black.withValues(alpha: 0.3),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+      ),
+
+      // ── Text Theme ────────────────────────────────────────
+      textTheme: const TextTheme(
+        displayLarge: TextStyle(
+          fontFamily: 'Poppins',
+          fontSize: 32,
+          fontWeight: FontWeight.w700,
+          color: AppColors.textLight,
+        ),
+        headlineMedium: TextStyle(
+          fontFamily: 'Poppins',
+          fontSize: 20,
+          fontWeight: FontWeight.w600,
+          color: AppColors.textLight,
+        ),
+        titleLarge: TextStyle(
+          fontFamily: 'Poppins',
+          fontSize: 18,
+          fontWeight: FontWeight.w600,
+          color: AppColors.textLight,
+        ),
+        bodyMedium: TextStyle(
           fontFamily: 'Poppins',
           fontSize: 14,
-          fontWeight: FontWeight.w600,
-          color: AppColors.textPrimary,
+          color: AppColors.textMuted,
         ),
       ),
     );

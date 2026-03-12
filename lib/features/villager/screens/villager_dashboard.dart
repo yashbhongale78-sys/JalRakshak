@@ -58,7 +58,7 @@ class _VillagerDashboardState extends ConsumerState<VillagerDashboard> {
         height: 74,
         backgroundColor: Colors.white,
         surfaceTintColor: Colors.white,
-        indicatorColor: AppColors.primary.withOpacity(0.14),
+        indicatorColor: AppColors.primary.withValues(alpha: 0.14),
         labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
         onDestinationSelected: (index) {
           setState(() {
@@ -162,7 +162,7 @@ class _DashboardHome extends StatelessWidget {
                     children: [
                       CircleAvatar(
                         radius: 24,
-                        backgroundColor: Colors.white.withOpacity(0.3),
+                        backgroundColor: Colors.white.withValues(alpha: 0.3),
                         child: Text(
                           user?.name.isNotEmpty == true
                               ? user!.name[0].toUpperCase()
@@ -192,7 +192,7 @@ class _DashboardHome extends StatelessWidget {
                             Text(
                               '${user?.village ?? ''}, ${user?.state ?? ''}',
                               style: TextStyle(
-                                color: Colors.white.withOpacity(0.85),
+                                color: Colors.white.withValues(alpha: 0.85),
                                 fontSize: 13,
                                 fontFamily: 'Poppins',
                               ),
@@ -229,7 +229,8 @@ class _DashboardHome extends StatelessWidget {
               decoration: BoxDecoration(
                 color: AppColors.warningContainer,
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: AppColors.warning.withOpacity(0.3)),
+                border:
+                    Border.all(color: AppColors.warning.withValues(alpha: 0.3)),
               ),
               child: Row(
                 children: [
@@ -297,7 +298,7 @@ class _SurveyBanner extends StatelessWidget {
             borderRadius: BorderRadius.circular(20),
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFF0288D1).withOpacity(0.3),
+                color: const Color(0xFF0288D1).withValues(alpha: 0.3),
                 blurRadius: 10,
                 offset: const Offset(0, 5),
               ),
@@ -308,7 +309,7 @@ class _SurveyBanner extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.2),
+                  color: Colors.white.withValues(alpha: 0.2),
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(
@@ -343,7 +344,8 @@ class _SurveyBanner extends StatelessWidget {
                   ],
                 ),
               ),
-              const Icon(Icons.arrow_forward_ios, color: Colors.white, size: 20),
+              const Icon(Icons.arrow_forward_ios,
+                  color: Colors.white, size: 20),
             ],
           ),
         ),
@@ -363,7 +365,7 @@ class _MapSectionWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 10,
               offset: const Offset(0, 5),
             ),
@@ -468,14 +470,14 @@ class _EmergencyBannerWidget extends StatelessWidget {
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              AppColors.alert.withOpacity(0.9),
-              AppColors.alertLight.withOpacity(0.9),
+              AppColors.alert.withValues(alpha: 0.9),
+              AppColors.alertLight.withValues(alpha: 0.9),
             ],
           ),
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: AppColors.alert.withOpacity(0.3),
+              color: AppColors.alert.withValues(alpha: 0.3),
               blurRadius: 8,
               offset: const Offset(0, 4),
             ),
@@ -550,7 +552,7 @@ class _ClinicsButtonCard extends StatelessWidget {
             border: Border.all(color: Colors.grey.shade200),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.04),
+                color: Colors.black.withValues(alpha: 0.04),
                 blurRadius: 10,
                 offset: const Offset(0, 4),
               ),

@@ -480,7 +480,7 @@ class _SymptomReportScreenState extends ConsumerState<SymptomReportScreen> {
               children: [
                 Container(
                   padding: const EdgeInsets.all(24),
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: AppColors.secondaryContainer,
                     shape: BoxShape.circle,
                   ),

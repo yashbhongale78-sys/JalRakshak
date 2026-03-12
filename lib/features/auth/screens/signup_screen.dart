@@ -28,7 +28,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
   String _selectedState = 'Assam';
   bool _obscurePassword = true;
   bool _isLoading = false;
-  int _currentStep = 0; // For multi-step form UX
+  final int _currentStep = 0; // For multi-step form UX
 
   @override
   void dispose() {
@@ -134,7 +134,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
             if (isSelected)
               Icon(Icons.check_circle, color: color, size: 22)
             else
-              Icon(Icons.radio_button_unchecked,
+              const Icon(Icons.radio_button_unchecked,
                   color: AppColors.textHint, size: 22),
           ],
         ),
@@ -318,7 +318,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
 
                 // State Dropdown
                 DropdownButtonFormField<String>(
-                  value: _selectedState,
+                  initialValue: _selectedState,
                   decoration: const InputDecoration(
                     labelText: 'State *',
                     prefixIcon: Icon(Icons.map_outlined),

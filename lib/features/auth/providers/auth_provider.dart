@@ -70,15 +70,15 @@ class AuthNotifier extends StateNotifier<AsyncValue<UserModel?>> {
     required String email,
     required String password,
   }) async {
-    this.state = const AsyncValue.loading();
+    state = const AsyncValue.loading();
     try {
       final user = await _authService.signIn(
         email: email,
         password: password,
       );
-      this.state = AsyncValue.data(user);
+      state = AsyncValue.data(user);
     } catch (e, stack) {
-      this.state = AsyncValue.error(e, stack);
+      state = AsyncValue.error(e, stack);
       rethrow;
     }
   }
@@ -87,9 +87,9 @@ class AuthNotifier extends StateNotifier<AsyncValue<UserModel?>> {
   Future<void> signOut() async {
     try {
       await _authService.signOut();
-      this.state = const AsyncValue.data(null);
+      state = const AsyncValue.data(null);
     } catch (e, stack) {
-      this.state = AsyncValue.error(e, stack);
+      state = AsyncValue.error(e, stack);
     }
   }
 }

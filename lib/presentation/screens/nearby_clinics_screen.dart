@@ -39,7 +39,7 @@ class _NearbyClinicsScreenState extends State<NearbyClinicsScreen> {
 
   /// Add markers for all dummy clinics.
   Future<void> _loadClinicMarkers() async {
-    final clinics = AppConstants.dummyClinics;
+    const clinics = AppConstants.dummyClinics;
     final markers = <Marker>{};
 
     for (int i = 0; i < clinics.length; i++) {

@@ -258,7 +258,7 @@ class _WaterReportScreenState extends ConsumerState<WaterReportScreen> {
                       Switch(
                         value: _isUrgent,
                         onChanged: (val) => setState(() => _isUrgent = val),
-                        activeColor: AppColors.alert,
+                        activeThumbColor: AppColors.alert,
                       ),
                     ],
                   ),

@@ -228,7 +228,7 @@ class _AlertCard extends StatelessWidget {
                 const Spacer(),
                 Text(
                   AppUtils.timeAgo(alert.issuedAt),
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: AppColors.textHint,
                     fontSize: 11,
                     fontFamily: 'Poppins',

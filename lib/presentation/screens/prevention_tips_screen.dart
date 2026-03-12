@@ -10,7 +10,7 @@ class PreventionTipsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tips = AppConstants.preventionTips;
+    const tips = AppConstants.preventionTips;
 
     return Scaffold(
       appBar: AppBar(
