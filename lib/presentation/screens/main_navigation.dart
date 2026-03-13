@@ -5,8 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/localization/app_localizations.dart';
+import '../../core/constants/app_constants.dart';
+import '../../features/auth/providers/auth_provider.dart';
 import 'dashboard_screen.dart';
 import 'map_screen.dart';
+import 'reports_screen.dart';
 import 'modern_alerts_screen.dart';
 import 'more_screen.dart';
 
@@ -21,14 +24,34 @@ class _MainNavigationState extends ConsumerState<MainNavigation>
     with TickerProviderStateMixin {
   int _selectedIndex = 0;
   late AnimationController _animationController;
-  late List<AnimationController> _tabAnimationControllers;
+  List<AnimationController> _tabAnimationControllers = [];
+  bool _isAshaWorker = false;
 
-  final List<Widget> _screens = [
-    const DashboardScreen(),
-    const MapScreen(),
-    const ModernAlertsScreen(),
-    const MoreScreen(),
-  ];
+  bool _checkIsAshaWorker() {
+    final user = ref.watch(currentUserProvider);
+    return user?.role == AppConstants.roleHealthWorker;
+  }
+
+  List<Widget> _getScreens() {
+    if (_isAshaWorker) {
+      // ASHA Worker: Home, Map, Reports, Alerts, More
+      return [
+        const DashboardScreen(),
+        const MapScreen(),
+        const ReportsScreen(),
+        const ModernAlertsScreen(),
+        const MoreScreen(),
+      ];
+    } else {
+      // Villager: Home, Map, Alerts, More
+      return [
+        const DashboardScreen(),
+        const MapScreen(),
+        const ModernAlertsScreen(),
+        const MoreScreen(),
+      ];
+    }
+  }
 
   @override
   void initState() {
@@ -37,16 +60,39 @@ class _MainNavigationState extends ConsumerState<MainNavigation>
       duration: const Duration(milliseconds: 300),
       vsync: this,
     );
+  }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Check role and initialize tab controllers
+    final wasAshaWorker = _isAshaWorker;
+    _isAshaWorker = _checkIsAshaWorker();
+
+    // Only reinitialize if role changed
+    if (wasAshaWorker != _isAshaWorker || _tabAnimationControllers.isEmpty) {
+      _initializeTabControllers();
+    }
+  }
+
+  void _initializeTabControllers() {
+    // Dispose old controllers if any
+    for (final controller in _tabAnimationControllers) {
+      controller.dispose();
+    }
+
+    final tabCount = _isAshaWorker ? 5 : 4;
     _tabAnimationControllers = List.generate(
-      4,
+      tabCount,
       (index) => AnimationController(
         duration: const Duration(milliseconds: 200),
         vsync: this,
       ),
     );
 
-    _tabAnimationControllers[0].forward();
+    if (_tabAnimationControllers.isNotEmpty) {
+      _tabAnimationControllers[0].forward();
+    }
   }
 
   @override
@@ -60,8 +106,12 @@ class _MainNavigationState extends ConsumerState<MainNavigation>
 
   void _onTabTapped(int index) {
     if (_selectedIndex != index) {
-      _tabAnimationControllers[_selectedIndex].reverse();
-      _tabAnimationControllers[index].forward();
+      if (_selectedIndex < _tabAnimationControllers.length) {
+        _tabAnimationControllers[_selectedIndex].reverse();
+      }
+      if (index < _tabAnimationControllers.length) {
+        _tabAnimationControllers[index].forward();
+      }
 
       setState(() {
         _selectedIndex = index;
@@ -71,10 +121,12 @@ class _MainNavigationState extends ConsumerState<MainNavigation>
 
   @override
   Widget build(BuildContext context) {
+    final screens = _getScreens();
+
     return Scaffold(
       body: IndexedStack(
         index: _selectedIndex,
-        children: _screens,
+        children: screens,
       ),
       bottomNavigationBar: _buildBottomNavigationBar(),
     );
@@ -98,18 +150,40 @@ class _MainNavigationState extends ConsumerState<MainNavigation>
       child: SafeArea(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            _buildNavItem(
-                0, Icons.dashboard_outlined, Icons.dashboard, l10n.t('home')),
-            _buildNavItem(1, Icons.map_outlined, Icons.map, l10n.t('map')),
-            _buildNavItem(2, Icons.notifications_outlined, Icons.notifications,
-                l10n.t('alerts'),
-                badgeCount: 3),
-            _buildNavItem(3, Icons.menu_outlined, Icons.menu, l10n.t('more')),
-          ],
+          children: _buildNavItems(),
         ),
       ),
     );
+  }
+
+  List<Widget> _buildNavItems() {
+    final l10n = AppLocalizations.of(context);
+
+    if (_isAshaWorker) {
+      // ASHA Worker: Home, Map, Reports, Alerts, More
+      return [
+        _buildNavItem(
+            0, Icons.dashboard_outlined, Icons.dashboard, l10n.t('home')),
+        _buildNavItem(1, Icons.map_outlined, Icons.map, l10n.t('map')),
+        _buildNavItem(2, Icons.description_outlined, Icons.description,
+            l10n.t('reports')),
+        _buildNavItem(3, Icons.notifications_outlined, Icons.notifications,
+            l10n.t('alerts'),
+            badgeCount: 3),
+        _buildNavItem(4, Icons.menu_outlined, Icons.menu, l10n.t('more')),
+      ];
+    } else {
+      // Villager: Home, Map, Alerts, More
+      return [
+        _buildNavItem(
+            0, Icons.dashboard_outlined, Icons.dashboard, l10n.t('home')),
+        _buildNavItem(1, Icons.map_outlined, Icons.map, l10n.t('map')),
+        _buildNavItem(2, Icons.notifications_outlined, Icons.notifications,
+            l10n.t('alerts'),
+            badgeCount: 3),
+        _buildNavItem(3, Icons.menu_outlined, Icons.menu, l10n.t('more')),
+      ];
+    }
   }
 
   Widget _buildNavItem(
@@ -120,7 +194,9 @@ class _MainNavigationState extends ConsumerState<MainNavigation>
     int? badgeCount,
   }) {
     final isSelected = _selectedIndex == index;
-    final animation = _tabAnimationControllers[index];
+    final animation = index < _tabAnimationControllers.length
+        ? _tabAnimationControllers[index]
+        : _animationController;
 
     return GestureDetector(
       onTap: () => _onTabTapped(index),

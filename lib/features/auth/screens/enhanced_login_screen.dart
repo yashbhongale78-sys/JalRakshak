@@ -20,7 +20,7 @@ class _EnhancedLoginScreenState extends ConsumerState<EnhancedLoginScreen>
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  String _selectedRole = 'ASHA Worker';
+  String _selectedRole = 'Villagers';
   bool _obscurePassword = true;
   bool _isLoading = false;
 
@@ -30,25 +30,18 @@ class _EnhancedLoginScreenState extends ConsumerState<EnhancedLoginScreen>
 
   final List<Map<String, dynamic>> _userRoles = [
     {
+      'value': 'Villagers',
+      'label': 'Villagers',
+      'icon': Icons.people,
+      'color': AppColors.primary,
+      'description': 'Community members',
+    },
+    {
       'value': 'ASHA Worker',
       'label': 'ASHA Worker',
       'icon': Icons.health_and_safety,
-      'color': AppColors.primary,
+      'color': AppColors.secondary,
       'description': 'Community health worker',
-    },
-    {
-      'value': 'Hospital Staff',
-      'label': 'Hospital/Clinic Staff',
-      'icon': Icons.local_hospital,
-      'color': AppColors.warning,
-      'description': 'Medical professional',
-    },
-    {
-      'value': 'Government Official',
-      'label': 'Government Official',
-      'icon': Icons.account_balance,
-      'color': AppColors.danger,
-      'description': 'BMO, District Admin, etc.',
     },
   ];
 

@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -117,10 +119,9 @@ class WaterborneDetectionApp extends ConsumerWidget {
           // Logged in → Route by role
           switch (user.role) {
             case AppConstants.roleVillager:
-              return const MainNavigation();
+              return const MainNavigation();  // Villager Dashboard
             case AppConstants.roleHealthWorker:
-              // TODO: Implement health worker dashboard in Part 2
-              return const _ComingSoonScreen(role: 'Health Worker');
+              return const MainNavigation();  // ASHA Worker Dashboard (same as villager for now)
             case AppConstants.roleGovernment:
               // TODO: Implement government dashboard in Part 2
               return const _ComingSoonScreen(role: 'Government Official');
@@ -346,6 +347,44 @@ class _ComingSoonScreen extends ConsumerWidget {
 
   const _ComingSoonScreen({required this.role});
 
+  Future<void> _fixUserRole(BuildContext context, WidgetRef ref) async {
+    try {
+      final currentUser = FirebaseAuth.instance.currentUser;
+      
+      if (currentUser == null) {
+        throw Exception('No user logged in');
+      }
+
+      // Update the user's role to villager
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(currentUser.uid)
+          .update({'role': 'villager'});
+
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('✅ Role updated! Reloading...'),
+            backgroundColor: AppColors.safe,
+          ),
+        );
+      }
+
+      // Sign out and back in to refresh the role
+      await ref.read(authProvider.notifier).signOut();
+      
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error: $e'),
+            backgroundColor: AppColors.danger,
+          ),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
@@ -401,6 +440,30 @@ class _ComingSoonScreen extends ConsumerWidget {
                   fontWeight: FontWeight.w600,
                   fontFamily: 'Poppins',
                 ),
+              ),
+              const SizedBox(height: 32),
+              // Fix Role Button
+              ElevatedButton.icon(
+                onPressed: () => _fixUserRole(context, ref),
+                icon: const Icon(Icons.person),
+                label: const Text('Switch to Villager Dashboard'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primary,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 16,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+              const Text(
+                'Click above to access the villager features',
+                style: TextStyle(
+                  color: AppColors.textMuted,
+                  fontSize: 12,
+                  fontFamily: 'Poppins',
+                ),
+                textAlign: TextAlign.center,
               ),
             ],
           ),

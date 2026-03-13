@@ -160,24 +160,6 @@ class _MoreScreenState extends ConsumerState<MoreScreen>
         },
       },
       {
-        'title': l10n.t('supply_chain'),
-        'subtitle': l10n.t('medical_supplies_tracking'),
-        'icon': Icons.local_shipping_outlined,
-        'color': AppColors.warning,
-        'onTap': () {
-          _showComingSoon(l10n.t('supply_chain'));
-        },
-      },
-      {
-        'title': l10n.t('analytics'),
-        'subtitle': l10n.t('health_data_insights'),
-        'icon': Icons.bar_chart_outlined,
-        'color': AppColors.safe,
-        'onTap': () {
-          _showComingSoon(l10n.t('analytics'));
-        },
-      },
-      {
         'title': l10n.t('settings'),
         'subtitle': l10n.t('app_preferences'),
         'icon': Icons.settings_outlined,

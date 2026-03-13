@@ -453,15 +453,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
       items: const [
         DropdownMenuItem(
           value: AppConstants.roleVillager,
-          child: Text('ASHA Worker'),
+          child: Text('Villagers'),
         ),
         DropdownMenuItem(
           value: AppConstants.roleHealthWorker,
-          child: Text('BMO'),
-        ),
-        DropdownMenuItem(
-          value: AppConstants.roleGovernment,
-          child: Text('District Admin'),
+          child: Text('ASHA Worker'),
         ),
       ],
       onChanged: (value) {

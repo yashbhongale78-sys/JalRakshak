@@ -480,6 +480,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
               fontWeight: FontWeight.w700,
               fontFamily: 'Poppins',
             ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
           const SizedBox(height: 2),
           Text(
