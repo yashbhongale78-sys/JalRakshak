@@ -1,18 +1,39 @@
-# 💧 Water-Borne Disease Early Detection Platform
-### Part 1: Foundation, Authentication & Villager Features
-#### Rural Northeast India Health Monitoring System
+# 💧 JALARAKSHA - Water-Borne Disease Early Detection Platform
+### Complete Health Monitoring System with Mobile App & WhatsApp Chatbot
+#### Rural Maharashtra Health Monitoring System
 
 ---
 
 ## 📋 Project Overview
 
-The **Water-Borne Disease Early Detection Platform** is a Flutter mobile application designed to empower rural communities in Northeast India to detect, report, and respond to water-borne disease outbreaks early. By bridging the gap between remote villages and health authorities, this platform aims to reduce outbreak severity through timely reporting and alerts.
+**JALARAKSHA** is a comprehensive health monitoring platform designed to empower rural communities in Maharashtra, India to detect, report, and respond to water-borne disease outbreaks early. The platform consists of:
+
+1. **📱 Flutter Mobile App** - Complete health reporting and monitoring system
+2. **🤖 WhatsApp Chatbot** - AI-powered health assistant for WhatsApp users
+3. **🔥 Firebase Backend** - Unified database and real-time synchronization
+
+By bridging the gap between remote villages and health authorities, this platform aims to reduce outbreak severity through timely reporting and alerts.
+
+---
+
+## 🏗️ System Architecture
+
+```
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   Flutter App   │    │ WhatsApp Bot    │    │   Firebase      │
+│                 │    │                 │    │                 │
+│ • Villagers     │◄──►│ • AI Assistant  │◄──►│ • Firestore DB  │
+│ • ASHA Workers  │    │ • Voice Support │    │ • Authentication│
+│ • Officials     │    │ • Multi-language│    │ • Cloud Storage │
+│ • 5 Languages   │    │ • Gemini AI     │    │ • Push Notifications│
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+```
 
 ---
 
 ## 🚨 Problem Statement
 
-Northeast India's rural communities face recurring outbreaks of water-borne diseases such as:
+Maharashtra's rural communities face recurring outbreaks of water-borne diseases such as:
 - **Cholera**, **Typhoid**, **Hepatitis A**, **Dysentery**, and **Giardiasis**
 
 Key challenges include:
@@ -20,37 +41,87 @@ Key challenges include:
 - Poor connectivity between villagers and health authorities
 - No centralized system for outbreak tracking
 - Language and literacy barriers in digital reporting
+- Limited smartphone access in rural areas
 - Inadequate awareness of prevention measures
 
 ---
 
 ## ✅ Solution Overview
 
-A mobile-first platform that enables:
-1. **Villagers** to report symptoms and water contamination issues with or without internet
-2. **Health Workers** to receive and respond to reports (Part 2)
-3. **Government Officials** to monitor outbreaks on a dashboard (Part 2)
+A comprehensive multi-platform system that enables:
 
-The app works **offline** using Hive local storage and syncs data to Firebase when connectivity is restored.
+### 📱 Mobile App Features
+1. **Villagers** - Report symptoms and view community health status
+2. **ASHA Health Workers** - Monitor reports and manage community health
+3. **Government Officials** - Dashboard analytics and outbreak management
+4. **Multi-language Support** - English, Hindi, Marathi, Tamil, Telugu
+
+### 🤖 WhatsApp Chatbot Features
+1. **AI-Powered Health Assistant** - Gemini AI for symptom detection
+2. **Voice Message Support** - Speech-to-text transcription
+3. **Multi-language Conversations** - Marathi, Hindi, English
+4. **Location-based Reporting** - District and village selection
+5. **Automated Alerts** - Integration with mobile app alert system
+
+Both platforms work together, sharing the same Firebase database for unified health monitoring.
 
 ---
 
-## 🎯 Features Implemented in Part 1
+## 🎯 Features Implemented
 
+### 📱 Mobile App Features
 | Feature | Status |
 |---|---|
+| **Authentication & User Management** | |
 | Firebase Integration (Auth, Firestore, Storage, FCM) | ✅ |
-| Role-Based Authentication (Villager / Health Worker / Govt) | ✅ |
-| Villager Dashboard | ✅ |
-| Symptom Reporting with Photo Upload | ✅ |
-| Water Contamination Reporting | ✅ |
-| Outbreak Alerts Screen | ✅ |
-| Prevention Tips Screen | ✅ |
-| Nearby Clinics Map (Google Maps) | ✅ |
-| Offline Reporting with Hive | ✅ |
-| Auto-sync when internet returns | ✅ |
-| Data Models (User, Symptom, Water, Alert) | ✅ |
-| Loading indicators & Error handling | ✅ |
+| Role-Based Authentication (Villager/ASHA/Government) | ✅ |
+| Enhanced Login/Signup UI | ✅ |
+| **Multi-language Support** | |
+| 5 Languages (English, Hindi, Marathi, Tamil, Telugu) | ✅ |
+| Complete UI Translation | ✅ |
+| Language Settings & Persistence | ✅ |
+| **Health Reporting System** | |
+| Quick Report Form on Dashboard | ✅ |
+| Symptom Reporting with GPS Location | ✅ |
+| Community Health Reports with Disease Counts | ✅ |
+| Location-based Disease Aggregation | ✅ |
+| **Alert & Notification System** | |
+| Real-time Health Alerts | ✅ |
+| Push Notifications (FCM) | ✅ |
+| Alert Severity Levels (Warning/Critical) | ✅ |
+| **Role-based Navigation** | |
+| Villager Dashboard (4 tabs: Home, Map, Alerts, More) | ✅ |
+| ASHA Worker Dashboard (5 tabs: + Reports) | ✅ |
+| Dynamic Navigation based on User Role | ✅ |
+| **Dashboard & Analytics** | |
+| Real-time Statistics (Today's Reports, Active Alerts) | ✅ |
+| Village Safety Status | ✅ |
+| Interactive Alert Cards | ✅ |
+
+### 🤖 WhatsApp Chatbot Features
+| Feature | Status |
+|---|---|
+| **AI Integration** | |
+| Gemini AI for Symptom Detection | ✅ |
+| Natural Language Processing | ✅ |
+| Intent Recognition | ✅ |
+| **Multi-language Support** | |
+| Marathi Language Support | ✅ |
+| Hindi Language Support | ✅ |
+| English Language Support | ✅ |
+| **WhatsApp Integration** | |
+| Message Processing | ✅ |
+| Voice Message Transcription | ✅ |
+| Interactive Menus | ✅ |
+| **Location & Reporting** | |
+| Maharashtra District Selection | ✅ |
+| Village Selection | ✅ |
+| Health Report Generation | ✅ |
+| Firebase Integration | ✅ |
+| **Session Management** | |
+| User Context Tracking | ✅ |
+| Language Preferences | ✅ |
+| Location Memory | ✅ |
 
 ---
 
@@ -119,62 +190,158 @@ service cloud.firestore {
 
 ## 🚀 How to Run the Project
 
-### Prerequisites
+### 📱 Mobile App Setup
+
+#### Prerequisites
 - Flutter SDK >= 3.0.0
 - Dart SDK >= 3.0.0
 - Android Studio / VS Code
-- Firebase project configured (see above)
+- Firebase project configured (see Firebase setup below)
 
-### Steps
+#### Steps
 ```bash
 # 1. Clone repository
-git clone https://github.com/your-org/waterborne-detection.git
-cd waterborne-detection
+git clone https://github.com/yashbhongale78-sys/JalRakshak.git
+cd JalRakshak
 
 # 2. Install dependencies
 flutter pub get
 
-# 3. Run code generation (for Hive adapters)
-flutter pub run build_runner build --delete-conflicting-outputs
-
-# 4. Run app
+# 3. Run app
 flutter run
 ```
 
-### Environment
-- Minimum Android SDK: **21 (Android 5.0)**
-- Minimum iOS: **12.0**
-- Target Android SDK: **33**
+### 🤖 WhatsApp Chatbot Setup
+
+#### Prerequisites
+- Python 3.9+
+- WhatsApp Business API access
+- Gemini AI API key
+- Firebase service account
+
+#### Steps
+```bash
+# 1. Navigate to backend
+cd backend
+
+# 2. Install dependencies
+pip install -r requirements.txt
+
+# 3. Setup environment variables
+cp .env.example .env
+# Edit .env with your API keys
+
+# 4. Add Firebase credentials
+# Place firebase_key.json in backend folder
+
+# 5. Run the server
+uvicorn main:app --reload --host 0.0.0.0 --port 8000
+```
+
+#### Environment Variables (.env)
+```env
+# Gemini AI
+GEMINI_API_KEY=your_gemini_api_key
+
+# WhatsApp Business API
+WHATSAPP_TOKEN=your_whatsapp_token
+WHATSAPP_PHONE_ID=your_phone_number_id
+VERIFY_TOKEN=your_webhook_verify_token
+
+# Firebase
+FIREBASE_PROJECT_ID=waterborne-detection
+```
+
+### Environment Requirements
+- **Mobile App**: Minimum Android SDK 21, iOS 12.0
+- **Backend**: Python 3.9+, FastAPI, Firebase Admin SDK
 
 ---
 
 ## 📁 Project Structure
 
 ```
-lib/
-├── core/               # App-wide constants, theme, utilities
-├── data/               # Models, repositories, Firebase services  
-├── features/           # Auth, villager, reports feature modules
-├── presentation/       # Shared screens, widgets, providers
-└── main.dart           # App entry point
+JalRakshak/
+├── lib/                          # Flutter Mobile App
+│   ├── core/                     # App-wide constants, theme, localization
+│   ├── data/                     # Models, repositories, Firebase services  
+│   ├── features/                 # Auth, villager, reports feature modules
+│   ├── presentation/             # Shared screens, widgets, providers
+│   └── main.dart                 # App entry point
+├── backend/                      # WhatsApp Chatbot Backend
+│   ├── main.py                   # FastAPI application entry point
+│   ├── ai.py                     # Gemini AI integration
+│   ├── whatsapp.py              # WhatsApp API integration
+│   ├── firebase_db.py           # Firebase database operations
+│   ├── sessions.py              # User session management
+│   ├── menu.py                  # Interactive menu systems
+│   ├── requirements.txt         # Python dependencies
+│   └── README.md                # Backend documentation
+├── android/                     # Android-specific files
+├── ios/                         # iOS-specific files
+└── README.md                    # This file
 ```
 
 ---
 
-## 🛣️ Roadmap
+## 🛣️ Development Roadmap
 
-- **Part 1** ✅ → Foundation + Villager Features
-- **Part 2** 🔜 → Health Worker Dashboard + Government Analytics
-- **Part 3** 🔜 → ML-based Outbreak Prediction + SMS Alerts
+- **Phase 1** ✅ → Foundation + Authentication + Basic Reporting
+- **Phase 2** ✅ → Multi-language Support + Role-based Navigation  
+- **Phase 3** ✅ → WhatsApp Chatbot + AI Integration
+- **Phase 4** 🔜 → Advanced Analytics + ML Outbreak Prediction
+- **Phase 5** 🔜 → SMS Alerts + Offline Sync Enhancement
 
 ---
 
 ## 👥 Target Users
 
-- **Villagers** in remote areas of Assam, Meghalaya, Manipur, Nagaland
-- **ASHA Health Workers** making village rounds
-- **State Health Department Officials**
+### Primary Users
+- **Villagers** in rural Maharashtra reporting health issues
+- **ASHA Health Workers** monitoring community health
+- **Government Health Officials** managing district-level health data
+
+### Access Methods
+- **Smartphone Users** → Flutter Mobile App
+- **WhatsApp Users** → AI Chatbot (no app installation needed)
+- **Feature Phone Users** → SMS integration (planned)
 
 ---
 
-*Built with ❤️ for Northeast India's rural communities*
+## 🌍 Geographic Coverage
+
+**Current**: Maharashtra State, India
+- All 36 districts supported
+- Village-level location tracking
+- Division-wise organization (Konkan, Pune, Nashik, Aurangabad, Amravati, Nagpur)
+
+**Planned**: Expansion to other Indian states
+
+---
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+## 📞 Support
+
+For support and queries:
+- **Issues**: [GitHub Issues](https://github.com/yashbhongale78-sys/JalRakshak/issues)
+- **Documentation**: Check individual README files in `/backend` folder
+- **Firebase Setup**: Follow the detailed Firebase setup guide above
+
+---
+
+*Built with ❤️ for Maharashtra's rural communities*
