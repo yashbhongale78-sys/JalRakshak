@@ -133,8 +133,6 @@ class _MainNavigationState extends ConsumerState<MainNavigation>
   }
 
   Widget _buildBottomNavigationBar() {
-    final l10n = AppLocalizations.of(context);
-
     return Container(
       height: 80 + MediaQuery.of(context).padding.bottom,
       decoration: BoxDecoration(
