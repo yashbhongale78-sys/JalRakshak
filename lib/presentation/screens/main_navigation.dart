@@ -6,7 +6,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/theme/app_theme.dart';
 import 'dashboard_screen.dart';
 import 'map_screen.dart';
-import 'reports_screen.dart';
 import 'modern_alerts_screen.dart';
 import 'more_screen.dart';
 
@@ -26,7 +25,6 @@ class _MainNavigationState extends ConsumerState<MainNavigation>
   final List<Widget> _screens = [
     const DashboardScreen(),
     const MapScreen(),
-    const ReportsScreen(),
     const ModernAlertsScreen(),
     const MoreScreen(),
   ];
@@ -40,7 +38,7 @@ class _MainNavigationState extends ConsumerState<MainNavigation>
     );
 
     _tabAnimationControllers = List.generate(
-      5,
+      4,
       (index) => AnimationController(
         duration: const Duration(milliseconds: 200),
         vsync: this,
@@ -101,11 +99,9 @@ class _MainNavigationState extends ConsumerState<MainNavigation>
             _buildNavItem(0, Icons.dashboard_outlined, Icons.dashboard, 'Home'),
             _buildNavItem(1, Icons.map_outlined, Icons.map, 'Map'),
             _buildNavItem(
-                2, Icons.description_outlined, Icons.description, 'Reports'),
-            _buildNavItem(
-                3, Icons.notifications_outlined, Icons.notifications, 'Alerts',
+                2, Icons.notifications_outlined, Icons.notifications, 'Alerts',
                 badgeCount: 3),
-            _buildNavItem(4, Icons.menu_outlined, Icons.menu, 'More'),
+            _buildNavItem(3, Icons.menu_outlined, Icons.menu, 'More'),
           ],
         ),
       ),
