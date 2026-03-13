@@ -69,7 +69,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
               child: QuickReportCard(),
             ),
             const SliverPadding(
-              padding: EdgeInsets.only(bottom: 24),
+              padding: EdgeInsets.only(bottom: 48),
             ),
           ],
         ),
@@ -626,9 +626,15 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
     final isCritical = alert['severity'] == 'critical';
     final color = isCritical ? AppColors.danger : AppColors.warning;
 
+    // Extract disease name from title (e.g., "Fever Outbreak Alert" -> "Fever")
+    final title = alert['title'] as String;
+    final diseaseName = title.replaceAll(' Outbreak Alert', '').trim();
+    final location = alert['zone'] ?? 'Unknown Location';
+    final district = alert['district'] ?? '';
+
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: AppColors.cardDark,
         borderRadius: BorderRadius.circular(12),
@@ -661,21 +667,72 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      alert['title'],
-                      style: const TextStyle(
-                        color: AppColors.textLight,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        fontFamily: 'Poppins',
-                      ),
+                    Row(
+                      children: [
+                        Flexible(
+                          child: Text(
+                            diseaseName,
+                            style: TextStyle(
+                              color: color,
+                              fontSize: 15,
+                              fontWeight: FontWeight.w700,
+                              fontFamily: 'Poppins',
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        const SizedBox(width: 6),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 6,
+                            vertical: 2,
+                          ),
+                          decoration: BoxDecoration(
+                            color: color.withValues(alpha: 0.2),
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: Text(
+                            isCritical ? 'CRITICAL' : 'WARNING',
+                            style: TextStyle(
+                              color: color,
+                              fontSize: 9,
+                              fontWeight: FontWeight.w700,
+                              fontFamily: 'Poppins',
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 4),
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.location_on,
+                          color: AppColors.textMuted,
+                          size: 12,
+                        ),
+                        const SizedBox(width: 4),
+                        Expanded(
+                          child: Text(
+                            district.isNotEmpty
+                                ? '$location, $district'
+                                : location,
+                            style: const TextStyle(
+                              color: AppColors.textMuted,
+                              fontSize: 12,
+                              fontFamily: 'Poppins',
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 2),
                     Text(
-                      '${alert['reportCount']} reports in last 24 hours - ${alert['zone']}',
+                      '${alert['reportCount']} cases in 24h',
                       style: const TextStyle(
                         color: AppColors.textMuted,
-                        fontSize: 12,
+                        fontSize: 11,
                         fontFamily: 'Poppins',
                       ),
                     ),
@@ -686,7 +743,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
                 timeago.format(alert['timestamp']),
                 style: const TextStyle(
                   color: AppColors.textMuted,
-                  fontSize: 12,
+                  fontSize: 11,
                   fontFamily: 'Poppins',
                 ),
               ),

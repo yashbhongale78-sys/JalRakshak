@@ -5,12 +5,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/user_model.dart';
 import '../../core/constants/app_constants.dart';
+import 'notification_service.dart';
 
 /// Service class wrapping Firebase Authentication.
 /// Handles sign-up, login, logout, and user profile management.
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final NotificationService _notificationService = NotificationService();
 
   // ─── Stream of auth state changes ──────────────────────────
   Stream<User?> get authStateChanges => _auth.authStateChanges();
@@ -64,6 +66,9 @@ class AuthService {
           .doc(user.uid)
           .set(userModel.toMap());
 
+      // Subscribe to notification topics based on role
+      await _notificationService.subscribeByRole(role);
+
       return userModel;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'email-already-in-use') {
@@ -107,7 +112,11 @@ class AuthService {
       // profile document is missing, which otherwise drops the user back to
       // the login screen with no visible explanation.
       final profile = await getUserProfile(user.uid);
-      if (profile != null) return profile;
+      if (profile != null) {
+        // Subscribe to notification topics based on role
+        await _notificationService.subscribeByRole(profile.role);
+        return profile;
+      }
 
       final recoveredProfile = _buildFallbackProfile(
         user,
@@ -252,8 +261,7 @@ class AuthService {
       case 'weak-password':
         return Exception('Password must be at least 6 characters long.');
       case 'email-already-in-use':
-        return Exception(
-            'An account already exists with this email address.');
+        return Exception('An account already exists with this email address.');
       case 'user-not-found':
         return Exception('No account found with this email address.');
       case 'wrong-password':
@@ -261,8 +269,7 @@ class AuthService {
       case 'invalid-email':
         return Exception('Please enter a valid email address.');
       case 'user-disabled':
-        return Exception(
-            'This account has been disabled. Contact support.');
+        return Exception('This account has been disabled. Contact support.');
       case 'too-many-requests':
         return Exception('Too many attempts. Please wait and try again.');
       case 'network-request-failed':

@@ -7,6 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geolocator/geolocator.dart';
 import '../../core/theme/app_theme.dart';
 import '../../features/auth/providers/auth_provider.dart';
+import '../../data/services/notification_service.dart';
 
 class QuickReportCard extends ConsumerStatefulWidget {
   const QuickReportCard({super.key});
@@ -21,6 +22,7 @@ class _QuickReportCardState extends ConsumerState<QuickReportCard> {
   final _locationController = TextEditingController();
   final _descriptionController = TextEditingController();
   final _otherDiseaseController = TextEditingController();
+  final _notificationService = NotificationService();
 
   String _selectedDisease = 'Fever';
   String _selectedCause = 'Contaminated Water';
@@ -263,6 +265,14 @@ class _QuickReportCardState extends ConsumerState<QuickReportCard> {
           'progress': reportCount >= 5 ? 0.8 : 0.5,
           'status': 'Active',
         });
+
+        // Send push notification
+        await _notificationService.sendAlertNotification(
+          disease: disease,
+          location: user.village,
+          caseCount: reportCount,
+          isCritical: severity == 'critical',
+        );
       }
     } catch (e) {
       print('Error checking/creating alert: $e');

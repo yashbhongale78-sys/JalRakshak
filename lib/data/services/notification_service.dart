@@ -35,6 +35,9 @@ class NotificationService {
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
       await _setupLocalNotifications();
       await _setupFCMListeners();
+
+      // Get and print FCM token for testing
+      await getToken();
     }
   }
 
@@ -115,7 +118,10 @@ class NotificationService {
 
   /// Get device FCM token (for targeted notifications).
   Future<String?> getToken() async {
-    return await _fcm.getToken();
+    final token = await _fcm.getToken();
+    // Print token for testing - remove in production
+    print('FCM Token: $token');
+    return token;
   }
 
   /// Subscribe user to role-appropriate topics.
@@ -132,5 +138,24 @@ class NotificationService {
         await subscribeToTopic(AppConstants.fcmTopicHealthWorkers);
         break;
     }
+  }
+
+  /// Send a local notification for a new alert
+  Future<void> sendAlertNotification({
+    required String disease,
+    required String location,
+    required int caseCount,
+    required bool isCritical,
+  }) async {
+    final title = isCritical
+        ? '🚨 CRITICAL: $disease Outbreak'
+        : '⚠️ WARNING: $disease Alert';
+    final body = '$caseCount cases reported in $location in the last 24 hours';
+
+    await _showLocalNotification(
+      title: title,
+      body: body,
+      id: DateTime.now().millisecondsSinceEpoch,
+    );
   }
 }
