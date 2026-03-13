@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import '../../core/theme/app_theme.dart';
+import '../../core/localization/app_localizations.dart';
 import '../../features/auth/providers/auth_provider.dart';
 import '../../data/models/user_model.dart';
 import '../../data/providers/reports_provider.dart';
@@ -78,6 +79,14 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
   }
 
   Widget _buildAppBar(UserModel? user) {
+    final l10n = AppLocalizations.of(context);
+    final greeting = _getGreeting();
+    final greetingKey = greeting == 'Morning'
+        ? 'good_morning'
+        : greeting == 'Afternoon'
+            ? 'good_afternoon'
+            : 'good_evening';
+
     return SliverAppBar(
       expandedHeight: 120,
       floating: false,
@@ -97,7 +106,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Text(
-                      'Good ${_getGreeting()}, ${user?.name.split(' ').first ?? 'User'}',
+                      '${l10n.t(greetingKey)}, ${user?.name.split(' ').first ?? 'User'}',
                       style: const TextStyle(
                         color: AppColors.textLight,
                         fontSize: 20,
@@ -186,6 +195,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
   }
 
   Widget _buildWelcomeCard(UserModel? user) {
+    final l10n = AppLocalizations.of(context);
+
     return SliverToBoxAdapter(
       child: Container(
         margin: const EdgeInsets.all(16),
@@ -220,9 +231,9 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'JALARAKSHA Active',
-                    style: TextStyle(
+                  Text(
+                    '${l10n.t('app_name')} Active',
+                    style: const TextStyle(
                       color: Colors.white,
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
@@ -238,7 +249,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
                           final total = riskCounts.values
                               .fold(0, (sum, count) => sum + count);
                           return Text(
-                            'System monitoring $total villages',
+                            '${l10n.t('system_monitoring')} $total ${l10n.t('villages')}',
                             style: const TextStyle(
                               color: Colors.white70,
                               fontSize: 14,
@@ -246,17 +257,17 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
                             ),
                           );
                         },
-                        loading: () => const Text(
-                          'System monitoring villages...',
-                          style: TextStyle(
+                        loading: () => Text(
+                          '${l10n.t('system_monitoring')} ${l10n.t('villages')}...',
+                          style: const TextStyle(
                             color: Colors.white70,
                             fontSize: 14,
                             fontFamily: 'Poppins',
                           ),
                         ),
-                        error: (_, __) => const Text(
-                          'System monitoring villages',
-                          style: TextStyle(
+                        error: (_, __) => Text(
+                          '${l10n.t('system_monitoring')} ${l10n.t('villages')}',
+                          style: const TextStyle(
                             color: Colors.white70,
                             fontSize: 14,
                             fontFamily: 'Poppins',
@@ -287,6 +298,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
   }
 
   Widget _buildStatsSection() {
+    final l10n = AppLocalizations.of(context);
+
     return SliverToBoxAdapter(
       child: Container(
         height: 120,
@@ -300,25 +313,26 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
                 final todayReportsAsync = ref.watch(todayReportsCountProvider);
                 return todayReportsAsync.when(
                   data: (count) => _buildStatCard(
-                    title: "Today's Reports",
+                    title: l10n.t('todays_reports'),
                     value: count.toString(),
                     icon: Icons.trending_up,
                     color: AppColors.primary,
-                    trend: '+${(count * 0.2).round()} from yesterday',
+                    trend:
+                        '+${(count * 0.2).round()} ${l10n.t('from_yesterday')}',
                   ),
                   loading: () => _buildStatCard(
-                    title: "Today's Reports",
+                    title: l10n.t('todays_reports'),
                     value: '...',
                     icon: Icons.trending_up,
                     color: AppColors.primary,
-                    trend: 'Loading...',
+                    trend: l10n.t('loading'),
                   ),
                   error: (_, __) => _buildStatCard(
-                    title: "Today's Reports",
+                    title: l10n.t('todays_reports'),
                     value: '0',
                     icon: Icons.trending_up,
                     color: AppColors.primary,
-                    trend: 'Error loading',
+                    trend: l10n.t('error_loading'),
                   ),
                 );
               },
@@ -331,40 +345,40 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
                 return alertsAsync.when(
                   data: (count) => criticalAsync.when(
                     data: (critical) => _buildStatCard(
-                      title: 'Active Alerts',
+                      title: l10n.t('active_alerts'),
                       value: count.toString(),
                       icon: Icons.warning_outlined,
                       color: AppColors.danger,
-                      trend: '$critical critical',
+                      trend: '$critical ${l10n.t('critical_count')}',
                     ),
                     loading: () => _buildStatCard(
-                      title: 'Active Alerts',
+                      title: l10n.t('active_alerts'),
                       value: count.toString(),
                       icon: Icons.warning_outlined,
                       color: AppColors.danger,
-                      trend: 'Loading...',
+                      trend: l10n.t('loading'),
                     ),
                     error: (_, __) => _buildStatCard(
-                      title: 'Active Alerts',
+                      title: l10n.t('active_alerts'),
                       value: count.toString(),
                       icon: Icons.warning_outlined,
                       color: AppColors.danger,
-                      trend: 'Error',
+                      trend: l10n.t('error_loading'),
                     ),
                   ),
                   loading: () => _buildStatCard(
-                    title: 'Active Alerts',
+                    title: l10n.t('active_alerts'),
                     value: '...',
                     icon: Icons.warning_outlined,
                     color: AppColors.danger,
-                    trend: 'Loading...',
+                    trend: l10n.t('loading'),
                   ),
                   error: (_, __) => _buildStatCard(
-                    title: 'Active Alerts',
+                    title: l10n.t('active_alerts'),
                     value: '0',
                     icon: Icons.warning_outlined,
                     color: AppColors.danger,
-                    trend: 'Error loading',
+                    trend: l10n.t('error_loading'),
                   ),
                 );
               },
@@ -382,37 +396,37 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
                         ? ((safeCount / total) * 100).toStringAsFixed(1)
                         : '0.0';
                     return _buildStatCard(
-                      title: 'Villages Safe',
+                      title: l10n.t('villages_safe'),
                       value: safeCount.toString(),
                       icon: Icons.check_circle_outline,
                       color: AppColors.safe,
-                      trend: '$percentage% coverage',
+                      trend: '$percentage% ${l10n.t('coverage')}',
                     );
                   },
                   loading: () => _buildStatCard(
-                    title: 'Villages Safe',
+                    title: l10n.t('villages_safe'),
                     value: '...',
                     icon: Icons.check_circle_outline,
                     color: AppColors.safe,
-                    trend: 'Loading...',
+                    trend: l10n.t('loading'),
                   ),
                   error: (_, __) => _buildStatCard(
-                    title: 'Villages Safe',
+                    title: l10n.t('villages_safe'),
                     value: '0',
                     icon: Icons.check_circle_outline,
                     color: AppColors.safe,
-                    trend: 'Error loading',
+                    trend: l10n.t('error_loading'),
                   ),
                 );
               },
             ),
             // Response Rate - Calculated
             _buildStatCard(
-              title: 'Response Rate',
+              title: l10n.t('response_rate'),
               value: '94%',
               icon: Icons.schedule_outlined,
               color: AppColors.warning,
-              trend: 'Avg 2.3 hrs',
+              trend: l10n.t('avg_hours'),
             ),
           ],
         ),
@@ -430,7 +444,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
     return Container(
       width: 160,
       margin: const EdgeInsets.only(right: 12),
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: AppColors.cardDark,
         borderRadius: BorderRadius.circular(12),
@@ -441,10 +455,11 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
           Row(
             children: [
-              Icon(icon, color: color, size: 20),
+              Icon(icon, color: color, size: 18),
               const Spacer(),
               Container(
                 width: 6,
@@ -456,34 +471,38 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
               ),
             ],
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 6),
           Text(
             value,
             style: TextStyle(
               color: color,
-              fontSize: 24,
+              fontSize: 22,
               fontWeight: FontWeight.w700,
               fontFamily: 'Poppins',
             ),
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 2),
           Text(
             title,
             style: const TextStyle(
               color: AppColors.textLight,
-              fontSize: 12,
+              fontSize: 11,
               fontWeight: FontWeight.w500,
               fontFamily: 'Poppins',
             ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 2),
           Text(
             trend,
             style: const TextStyle(
               color: AppColors.textMuted,
-              fontSize: 10,
+              fontSize: 9,
               fontFamily: 'Poppins',
             ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
         ],
       ),
@@ -491,6 +510,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
   }
 
   Widget _buildActiveAlertsSection() {
+    final l10n = AppLocalizations.of(context);
+
     return SliverToBoxAdapter(
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 16),
@@ -499,9 +520,9 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
           children: [
             Row(
               children: [
-                const Text(
-                  'Active Alerts',
-                  style: TextStyle(
+                Text(
+                  l10n.t('active_alerts'),
+                  style: const TextStyle(
                     color: AppColors.textLight,
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
@@ -579,10 +600,10 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
                     if (alerts.isEmpty) {
                       return Container(
                         padding: const EdgeInsets.all(32),
-                        child: const Center(
+                        child: Center(
                           child: Text(
-                            'No active alerts',
-                            style: TextStyle(
+                            l10n.t('no_active_alerts'),
+                            style: const TextStyle(
                               color: AppColors.textMuted,
                               fontFamily: 'Poppins',
                             ),
@@ -623,13 +644,14 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
   }
 
   Widget _buildAlertCardFromFirebase(Map<String, dynamic> alert) {
+    final l10n = AppLocalizations.of(context);
     final isCritical = alert['severity'] == 'critical';
     final color = isCritical ? AppColors.danger : AppColors.warning;
 
     // Extract disease name from title (e.g., "Fever Outbreak Alert" -> "Fever")
     final title = alert['title'] as String;
     final diseaseName = title.replaceAll(' Outbreak Alert', '').trim();
-    final location = alert['zone'] ?? 'Unknown Location';
+    final location = alert['zone'] ?? l10n.t('unknown_location');
     final district = alert['district'] ?? '';
 
     return Container(
@@ -692,7 +714,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
                             borderRadius: BorderRadius.circular(4),
                           ),
                           child: Text(
-                            isCritical ? 'CRITICAL' : 'WARNING',
+                            isCritical ? l10n.t('critical') : l10n.t('warning'),
                             style: TextStyle(
                               color: color,
                               fontSize: 9,
@@ -729,7 +751,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      '${alert['reportCount']} cases in 24h',
+                      '${alert['reportCount']} ${l10n.t('cases_in_24h')}',
                       style: const TextStyle(
                         color: AppColors.textMuted,
                         fontSize: 11,
@@ -771,12 +793,14 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
           const SizedBox(height: 12),
           Row(
             children: [
-              _buildActionButton('Resolve', AppColors.safe, Icons.check),
-              const SizedBox(width: 8),
-              _buildActionButton('Dispatch', AppColors.primary, Icons.send),
+              _buildActionButton(
+                  l10n.t('resolve'), AppColors.safe, Icons.check),
               const SizedBox(width: 8),
               _buildActionButton(
-                  'Escalate', AppColors.danger, Icons.arrow_upward),
+                  l10n.t('dispatch'), AppColors.primary, Icons.send),
+              const SizedBox(width: 8),
+              _buildActionButton(
+                  l10n.t('escalate'), AppColors.danger, Icons.arrow_upward),
             ],
           ),
         ],

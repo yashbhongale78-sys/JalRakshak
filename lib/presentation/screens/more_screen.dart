@@ -4,8 +4,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/theme/app_theme.dart';
+import '../../core/localization/app_localizations.dart';
 import '../../features/auth/providers/auth_provider.dart';
 import 'officials_screen.dart';
+import 'settings_screen.dart';
 
 class MoreScreen extends ConsumerStatefulWidget {
   const MoreScreen({super.key});
@@ -73,7 +75,7 @@ class _MoreScreenState extends ConsumerState<MoreScreen>
               width: 60,
               height: 60,
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.2),
+                color: Colors.white.withValues(alpha: 0.2),
                 shape: BoxShape.circle,
               ),
               child: Center(
@@ -111,7 +113,7 @@ class _MoreScreenState extends ConsumerState<MoreScreen>
                       vertical: 4,
                     ),
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.2),
+                      color: Colors.white.withValues(alpha: 0.2),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Text(
@@ -127,7 +129,7 @@ class _MoreScreenState extends ConsumerState<MoreScreen>
                   Text(
                     '${user?.village ?? ''}, ${user?.district ?? ''}',
                     style: TextStyle(
-                      color: Colors.white.withOpacity(0.8),
+                      color: Colors.white.withValues(alpha: 0.8),
                       fontSize: 14,
                       fontFamily: 'Poppins',
                     ),
@@ -142,10 +144,12 @@ class _MoreScreenState extends ConsumerState<MoreScreen>
   }
 
   Widget _buildMenuItems() {
+    final l10n = AppLocalizations.of(context);
+
     final menuItems = [
       {
-        'title': 'Officials Directory',
-        'subtitle': 'Contact health officials',
+        'title': l10n.t('officials_directory'),
+        'subtitle': l10n.t('contact_health_officials'),
         'icon': Icons.people_outline,
         'color': AppColors.primary,
         'onTap': () {
@@ -156,44 +160,47 @@ class _MoreScreenState extends ConsumerState<MoreScreen>
         },
       },
       {
-        'title': 'Supply Chain',
-        'subtitle': 'Medical supplies tracking',
+        'title': l10n.t('supply_chain'),
+        'subtitle': l10n.t('medical_supplies_tracking'),
         'icon': Icons.local_shipping_outlined,
         'color': AppColors.warning,
         'onTap': () {
-          _showComingSoon('Supply Chain');
+          _showComingSoon(l10n.t('supply_chain'));
         },
       },
       {
-        'title': 'Analytics',
-        'subtitle': 'Health data insights',
+        'title': l10n.t('analytics'),
+        'subtitle': l10n.t('health_data_insights'),
         'icon': Icons.bar_chart_outlined,
         'color': AppColors.safe,
         'onTap': () {
-          _showComingSoon('Analytics');
+          _showComingSoon(l10n.t('analytics'));
         },
       },
       {
-        'title': 'Settings',
-        'subtitle': 'App preferences',
+        'title': l10n.t('settings'),
+        'subtitle': l10n.t('app_preferences'),
         'icon': Icons.settings_outlined,
         'color': AppColors.textMuted,
         'onTap': () {
-          _showComingSoon('Settings');
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const SettingsScreen()),
+          );
         },
       },
       {
-        'title': 'Help & Support',
-        'subtitle': 'Get assistance',
+        'title': l10n.t('help_support'),
+        'subtitle': l10n.t('get_assistance'),
         'icon': Icons.help_outline,
         'color': AppColors.primary,
         'onTap': () {
-          _showComingSoon('Help & Support');
+          _showComingSoon(l10n.t('help_support'));
         },
       },
       {
-        'title': 'Logout',
-        'subtitle': 'Sign out of your account',
+        'title': l10n.t('logout'),
+        'subtitle': l10n.t('sign_out_account'),
         'icon': Icons.logout,
         'color': AppColors.danger,
         'onTap': () {
@@ -246,7 +253,7 @@ class _MoreScreenState extends ConsumerState<MoreScreen>
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: (item['color'] as Color).withOpacity(0.2),
+                    color: (item['color'] as Color).withValues(alpha: 0.2),
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
@@ -281,7 +288,7 @@ class _MoreScreenState extends ConsumerState<MoreScreen>
                     ],
                   ),
                 ),
-                Icon(
+                const Icon(
                   Icons.arrow_forward_ios,
                   color: AppColors.textMuted,
                   size: 16,
@@ -308,6 +315,7 @@ class _MoreScreenState extends ConsumerState<MoreScreen>
   }
 
   void _showComingSoon(String feature) {
+    final l10n = AppLocalizations.of(context);
     showDialog(
       context: context,
       builder: (context) {
@@ -321,7 +329,7 @@ class _MoreScreenState extends ConsumerState<MoreScreen>
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: AppColors.primary.withOpacity(0.2),
+                  color: AppColors.primary.withValues(alpha: 0.2),
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(
@@ -332,7 +340,7 @@ class _MoreScreenState extends ConsumerState<MoreScreen>
               ),
               const SizedBox(width: 12),
               Text(
-                '$feature',
+                l10n.t('coming_soon'),
                 style: const TextStyle(
                   color: AppColors.textLight,
                   fontFamily: 'Poppins',
@@ -340,9 +348,9 @@ class _MoreScreenState extends ConsumerState<MoreScreen>
               ),
             ],
           ),
-          content: const Text(
-            'This feature is being developed and will be available in the next update.',
-            style: TextStyle(
+          content: Text(
+            l10n.t('feature_being_developed'),
+            style: const TextStyle(
               color: AppColors.textMuted,
               fontFamily: 'Poppins',
             ),
@@ -350,9 +358,9 @@ class _MoreScreenState extends ConsumerState<MoreScreen>
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text(
-                'OK',
-                style: TextStyle(
+              child: Text(
+                l10n.t('ok'),
+                style: const TextStyle(
                   color: AppColors.primary,
                   fontFamily: 'Poppins',
                 ),
@@ -365,6 +373,7 @@ class _MoreScreenState extends ConsumerState<MoreScreen>
   }
 
   void _showLogoutDialog() {
+    final l10n = AppLocalizations.of(context);
     showDialog(
       context: context,
       builder: (context) {
@@ -373,16 +382,16 @@ class _MoreScreenState extends ConsumerState<MoreScreen>
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
-          title: const Text(
-            'Logout',
-            style: TextStyle(
+          title: Text(
+            l10n.t('logout'),
+            style: const TextStyle(
               color: AppColors.textLight,
               fontFamily: 'Poppins',
             ),
           ),
-          content: const Text(
-            'Are you sure you want to sign out of your account?',
-            style: TextStyle(
+          content: Text(
+            l10n.t('are_you_sure_logout'),
+            style: const TextStyle(
               color: AppColors.textMuted,
               fontFamily: 'Poppins',
             ),
@@ -390,9 +399,9 @@ class _MoreScreenState extends ConsumerState<MoreScreen>
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text(
-                'Cancel',
-                style: TextStyle(
+              child: Text(
+                l10n.t('cancel'),
+                style: const TextStyle(
                   color: AppColors.textMuted,
                   fontFamily: 'Poppins',
                 ),
@@ -406,9 +415,9 @@ class _MoreScreenState extends ConsumerState<MoreScreen>
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.danger,
               ),
-              child: const Text(
-                'Logout',
-                style: TextStyle(
+              child: Text(
+                l10n.t('logout'),
+                style: const TextStyle(
                   fontFamily: 'Poppins',
                 ),
               ),

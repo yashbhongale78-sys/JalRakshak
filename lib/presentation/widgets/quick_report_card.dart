@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geolocator/geolocator.dart';
 import '../../core/theme/app_theme.dart';
+import '../../core/localization/app_localizations.dart';
 import '../../features/auth/providers/auth_provider.dart';
 import '../../data/services/notification_service.dart';
 
@@ -145,8 +146,8 @@ class _QuickReportCardState extends ConsumerState<QuickReportCard> {
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Report submitted successfully!'),
+          SnackBar(
+            content: Text(AppLocalizations.of(context).t('report_submitted')),
             backgroundColor: AppColors.safe,
             behavior: SnackBarBehavior.floating,
           ),
@@ -236,6 +237,11 @@ class _QuickReportCardState extends ConsumerState<QuickReportCard> {
 
   Future<void> _checkAndCreateAlert(user, String disease) async {
     try {
+      print('🔍 Checking for alerts...');
+      print('Disease: $disease');
+      print('Village: ${user.village}');
+      print('District: ${user.district}');
+
       // Count recent reports in the same location
       final recentReports = await FirebaseFirestore.instance
           .collection('reports')
@@ -249,8 +255,11 @@ class _QuickReportCardState extends ConsumerState<QuickReportCard> {
 
       final reportCount = recentReports.docs.length;
 
+      print('📊 Found $reportCount reports in last 24 hours');
+
       // Create alert if threshold is reached
       if (reportCount >= 3) {
+        print('⚠️ THRESHOLD REACHED! Creating alert...');
         final severity = reportCount >= 5 ? 'critical' : 'warning';
 
         await FirebaseFirestore.instance.collection('alerts').add({
@@ -264,7 +273,13 @@ class _QuickReportCardState extends ConsumerState<QuickReportCard> {
           'reportCount': reportCount,
           'progress': reportCount >= 5 ? 0.8 : 0.5,
           'status': 'Active',
+          'resolved': false, // Add this field for the alerts provider
+          'intent': disease, // Add disease name for display
+          'report_count': reportCount, // Add for compatibility
+          'triggered_at': Timestamp.now(), // Add for compatibility
         });
+
+        print('✅ Alert created in Firestore');
 
         // Send push notification
         await _notificationService.sendAlertNotification(
@@ -273,14 +288,20 @@ class _QuickReportCardState extends ConsumerState<QuickReportCard> {
           caseCount: reportCount,
           isCritical: severity == 'critical',
         );
+
+        print('✅ Notification sent');
+      } else {
+        print('ℹ️ Not enough reports yet. Need 3, have $reportCount');
       }
     } catch (e) {
-      print('Error checking/creating alert: $e');
+      print('❌ Error checking/creating alert: $e');
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return Container(
       margin: const EdgeInsets.fromLTRB(16, 16, 16, 0),
       padding: const EdgeInsets.all(16),
@@ -318,10 +339,10 @@ class _QuickReportCardState extends ConsumerState<QuickReportCard> {
                   ),
                 ),
                 const SizedBox(width: 12),
-                const Expanded(
+                Expanded(
                   child: Text(
-                    'Quick Report',
-                    style: TextStyle(
+                    l10n.t('quick_report'),
+                    style: const TextStyle(
                       color: AppColors.textLight,
                       fontSize: 20,
                       fontWeight: FontWeight.w700,
@@ -338,7 +359,7 @@ class _QuickReportCardState extends ConsumerState<QuickReportCard> {
               controller: _nameController,
               style: const TextStyle(color: AppColors.textLight),
               decoration: InputDecoration(
-                labelText: 'Name',
+                labelText: l10n.t('name'),
                 labelStyle: const TextStyle(color: AppColors.textMuted),
                 prefixIcon:
                     const Icon(Icons.person_outline, color: AppColors.primary),
@@ -349,8 +370,9 @@ class _QuickReportCardState extends ConsumerState<QuickReportCard> {
                   borderSide: BorderSide.none,
                 ),
               ),
-              validator: (val) =>
-                  val?.isEmpty ?? true ? 'Name is required' : null,
+              validator: (val) => val?.isEmpty ?? true
+                  ? '${l10n.t('name')} ${l10n.t('is_required')}'
+                  : null,
             ),
             const SizedBox(height: 12),
 
@@ -359,7 +381,7 @@ class _QuickReportCardState extends ConsumerState<QuickReportCard> {
               controller: _locationController,
               style: const TextStyle(color: AppColors.textLight),
               decoration: InputDecoration(
-                labelText: 'Location',
+                labelText: l10n.t('location'),
                 labelStyle: const TextStyle(color: AppColors.textMuted),
                 prefixIcon:
                     const Icon(Icons.location_on, color: AppColors.primary),
@@ -370,8 +392,9 @@ class _QuickReportCardState extends ConsumerState<QuickReportCard> {
                   borderSide: BorderSide.none,
                 ),
               ),
-              validator: (val) =>
-                  val?.isEmpty ?? true ? 'Location is required' : null,
+              validator: (val) => val?.isEmpty ?? true
+                  ? '${l10n.t('location')} ${l10n.t('is_required')}'
+                  : null,
             ),
             const SizedBox(height: 12),
 
@@ -381,7 +404,7 @@ class _QuickReportCardState extends ConsumerState<QuickReportCard> {
               style: const TextStyle(color: AppColors.textLight),
               dropdownColor: AppColors.backgroundDark,
               decoration: InputDecoration(
-                labelText: 'Disease/Symptom',
+                labelText: l10n.t('disease'),
                 labelStyle: const TextStyle(color: AppColors.textMuted),
                 prefixIcon: const Icon(Icons.medical_services_outlined,
                     color: AppColors.primary),
@@ -395,7 +418,7 @@ class _QuickReportCardState extends ConsumerState<QuickReportCard> {
               items: _diseases.map((disease) {
                 return DropdownMenuItem(
                   value: disease,
-                  child: Text(disease),
+                  child: Text(l10n.t(disease.toLowerCase())),
                 );
               }).toList(),
               onChanged: (value) {
@@ -412,9 +435,9 @@ class _QuickReportCardState extends ConsumerState<QuickReportCard> {
                 controller: _otherDiseaseController,
                 style: const TextStyle(color: AppColors.textLight),
                 decoration: InputDecoration(
-                  labelText: 'Specify Disease/Symptom',
+                  labelText: '${l10n.t('disease')} (${l10n.t('other')})',
                   labelStyle: const TextStyle(color: AppColors.textMuted),
-                  hintText: 'Enter disease name',
+                  hintText: l10n.t('disease'),
                   hintStyle: const TextStyle(color: AppColors.textMuted),
                   prefixIcon:
                       const Icon(Icons.edit_outlined, color: AppColors.primary),
@@ -427,7 +450,7 @@ class _QuickReportCardState extends ConsumerState<QuickReportCard> {
                 ),
                 validator: (val) {
                   if (_selectedDisease == 'Other' && (val?.isEmpty ?? true)) {
-                    return 'Please specify the disease';
+                    return l10n.t('please_specify_disease');
                   }
                   return null;
                 },
@@ -441,7 +464,7 @@ class _QuickReportCardState extends ConsumerState<QuickReportCard> {
               style: const TextStyle(color: AppColors.textLight),
               dropdownColor: AppColors.backgroundDark,
               decoration: InputDecoration(
-                labelText: 'Caused By',
+                labelText: l10n.t('caused_by'),
                 labelStyle: const TextStyle(color: AppColors.textMuted),
                 prefixIcon: const Icon(Icons.warning_amber_outlined,
                     color: AppColors.primary),
@@ -472,7 +495,7 @@ class _QuickReportCardState extends ConsumerState<QuickReportCard> {
               style: const TextStyle(color: AppColors.textLight),
               maxLines: 3,
               decoration: InputDecoration(
-                labelText: 'Additional Details (Optional)',
+                labelText: l10n.t('description'),
                 labelStyle: const TextStyle(color: AppColors.textMuted),
                 prefixIcon: const Icon(Icons.description_outlined,
                     color: AppColors.primary),
@@ -507,9 +530,9 @@ class _QuickReportCardState extends ConsumerState<QuickReportCard> {
                           strokeWidth: 2,
                         ),
                       )
-                    : const Text(
-                        'Submit Report',
-                        style: TextStyle(
+                    : Text(
+                        l10n.t('submit_report'),
+                        style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                           fontFamily: 'Poppins',

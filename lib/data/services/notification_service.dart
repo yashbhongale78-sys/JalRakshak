@@ -120,7 +120,10 @@ class NotificationService {
   Future<String?> getToken() async {
     final token = await _fcm.getToken();
     // Print token for testing - remove in production
-    print('FCM Token: $token');
+    print('═══════════════════════════════════════════════════════');
+    print('🔔 FCM TOKEN FOR TESTING:');
+    print('$token');
+    print('═══════════════════════════════════════════════════════');
     return token;
   }
 
@@ -152,10 +155,17 @@ class NotificationService {
         : '⚠️ WARNING: $disease Alert';
     final body = '$caseCount cases reported in $location in the last 24 hours';
 
+    print('═══════════════════════════════════════════════════════');
+    print('📢 SENDING NOTIFICATION:');
+    print('Title: $title');
+    print('Body: $body');
+    print('═══════════════════════════════════════════════════════');
+
     await _showLocalNotification(
       title: title,
       body: body,
-      id: DateTime.now().millisecondsSinceEpoch,
+      id: DateTime.now().millisecondsSinceEpoch %
+          2147483647, // Keep within 32-bit integer range
     );
   }
 }

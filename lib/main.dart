@@ -8,9 +8,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'core/constants/app_constants.dart';
 import 'core/theme/app_theme.dart';
+import 'core/localization/app_localizations.dart';
+import 'core/providers/language_provider.dart';
 import 'data/models/symptom_report_model.dart';
 import 'data/models/water_report_model.dart';
 import 'data/services/notification_service.dart';
@@ -83,11 +86,20 @@ class WaterborneDetectionApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     // Watch auth state to decide which screen to show
     final authState = ref.watch(authProvider);
+    final locale = ref.watch(languageProvider);
 
     return MaterialApp(
       title: AppConstants.appName,
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
+      locale: locale,
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: AppLocalizations.supportedLocales,
       home: authState.when(
         // Loading — show splash screen
         loading: () => const _SplashScreen(),

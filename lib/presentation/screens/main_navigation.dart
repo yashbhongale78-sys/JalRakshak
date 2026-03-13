@@ -4,6 +4,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/theme/app_theme.dart';
+import '../../core/localization/app_localizations.dart';
 import 'dashboard_screen.dart';
 import 'map_screen.dart';
 import 'modern_alerts_screen.dart';
@@ -80,6 +81,8 @@ class _MainNavigationState extends ConsumerState<MainNavigation>
   }
 
   Widget _buildBottomNavigationBar() {
+    final l10n = AppLocalizations.of(context);
+
     return Container(
       height: 80 + MediaQuery.of(context).padding.bottom,
       decoration: BoxDecoration(
@@ -96,12 +99,13 @@ class _MainNavigationState extends ConsumerState<MainNavigation>
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            _buildNavItem(0, Icons.dashboard_outlined, Icons.dashboard, 'Home'),
-            _buildNavItem(1, Icons.map_outlined, Icons.map, 'Map'),
             _buildNavItem(
-                2, Icons.notifications_outlined, Icons.notifications, 'Alerts',
+                0, Icons.dashboard_outlined, Icons.dashboard, l10n.t('home')),
+            _buildNavItem(1, Icons.map_outlined, Icons.map, l10n.t('map')),
+            _buildNavItem(2, Icons.notifications_outlined, Icons.notifications,
+                l10n.t('alerts'),
                 badgeCount: 3),
-            _buildNavItem(3, Icons.menu_outlined, Icons.menu, 'More'),
+            _buildNavItem(3, Icons.menu_outlined, Icons.menu, l10n.t('more')),
           ],
         ),
       ),
