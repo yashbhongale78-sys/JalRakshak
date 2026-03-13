@@ -182,18 +182,10 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                 const SizedBox(height: 10),
                 _buildRoleCard(
                   role: AppConstants.roleHealthWorker,
-                  title: 'Health Worker / ASHA',
+                  title: 'ASHA Worker',
                   subtitle: 'Monitor reports & issue alerts',
                   icon: Icons.medical_services,
                   color: AppColors.secondary,
-                ),
-                const SizedBox(height: 10),
-                _buildRoleCard(
-                  role: AppConstants.roleGovernment,
-                  title: 'Government Official',
-                  subtitle: 'View outbreak dashboard & analytics',
-                  icon: Icons.account_balance,
-                  color: AppColors.warning,
                 ),
 
                 const SizedBox(height: 28),

@@ -441,6 +441,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
           Row(
             children: [
@@ -465,6 +466,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
               fontWeight: FontWeight.w700,
               fontFamily: 'Poppins',
             ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
           const SizedBox(height: 4),
           Text(
@@ -475,6 +478,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
               fontWeight: FontWeight.w500,
               fontFamily: 'Poppins',
             ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
           const SizedBox(height: 4),
           Text(
@@ -484,6 +489,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
               fontSize: 10,
               fontFamily: 'Poppins',
             ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
         ],
       ),
